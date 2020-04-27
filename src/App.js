@@ -7,10 +7,35 @@ import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop/shop.component';
 import Header from './components/header/header.component';
 import LoginRegistrationPage from './pages/login-registration-page/login-registration.component';
+import {auth} from './firebase/firebase.utils';
 
+class App extends React.Component {
+  constructor(){
+    super();
 
-function App() {
-  return (
+    this.state = {
+      currentUser: null
+    }
+  }
+
+  // handle authentication
+  unsubscribeFromAuth = null;
+  
+  componentDidMount(){
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
+      this.setState({currentUser: user});
+      console.log(user);
+    });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeFromAuth();
+  }
+
+  //end of handle authentication
+  
+  render(){
+    return (
     <div>
       <Header />
       <Switch>
@@ -20,6 +45,7 @@ function App() {
       </Switch>
     </div>
   );
+  }
 }
 
 export default App;
