@@ -32,6 +32,15 @@ $main-color: black;
         &:valid~.form-input-label {
             @include shrinkLabel();
         }
+        
+        &[value]:not([value=""]):invalid{
+            color:red;
+            
+            &~.form-input-label{
+                @include shrinkLabel();
+                color:orangered;
+            }
+        }
     }
 
     input[type='password'] {
