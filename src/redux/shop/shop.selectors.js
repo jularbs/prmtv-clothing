@@ -1,13 +1,5 @@
 import { createSelector } from 'reselect';
 
-// const COLLECTION_ID_MAP = {
-//     hats: 1,
-//     sneaker: 2,
-//     jackets: 3,
-//     womens: 4,
-//     mens: 5
-// };
-
 const selectShop = state => state.shop;
 
 export const selectCollections = createSelector(
@@ -15,12 +7,15 @@ export const selectCollections = createSelector(
     shop => shop.collections
 );
 
+//get array of shop state keys cause it is an object. do this when your data is an object  not array
+//objects are more optimized when using large data compared to array when finding a single data
+export const selectCollectionsForPreview = createSelector(
+    [selectCollections],
+    collections => Object.keys(collections).map(key => collections[key])
+)
+
 export const selectCollection = collectionUrlParam =>
     createSelector(
         [selectCollections],
-        collections => 
-            collections.find(
-                //collection => collection.id === COLLECTION_ID_MAP[collectionUrlParam]
-                collection => collection.routeName === collectionUrlParam
-            )
+        collections => collections[collectionUrlParam]
     );
