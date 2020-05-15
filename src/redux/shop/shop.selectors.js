@@ -11,11 +11,11 @@ export const selectCollections = createSelector(
 //objects are more optimized when using large data compared to array when finding a single data
 export const selectCollectionsForPreview = createSelector(
     [selectCollections],
-    collections => Object.keys(collections).map(key => collections[key])
+    collections => collections ? Object.keys(collections).map(key => collections[key]) : []
 )
 
 export const selectCollection = collectionUrlParam =>
     createSelector(
         [selectCollections],
-        collections => collections[collectionUrlParam]
+        collections => (collections ? collections[collectionUrlParam] : null)
     );

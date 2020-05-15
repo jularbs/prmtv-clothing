@@ -14,7 +14,6 @@ import { setCurrentUser } from './redux/user/user.actions';
 
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from './redux/user/user.selector';
-
 class App extends React.Component {
   // handle authentication
   unsubscribeFromAuth = null;
@@ -34,6 +33,7 @@ class App extends React.Component {
       }else{
         setCurrentUser(userAuth);
       }
+
     });
   }
 
