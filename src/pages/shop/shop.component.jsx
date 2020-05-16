@@ -7,18 +7,23 @@ import { connect } from 'react-redux';
 
 //REDUX THUNK CODE
 import { fetchCollectionsStartAsync } from '../../redux/shop/shop.actions'; 
-import { createStructuredSelector } from 'reselect';
-import { selectIsCollectionFetching, selectIsCollectionsLoaded } from '../../redux/shop/shop.selectors';
+// import { createStructuredSelector } from 'reselect';
+// import { selectIsCollectionsLoaded } from '../../redux/shop/shop.selectors'; <<REMOVED BY REFACTORING
 
-import CollectionsOverview from '../../components/collections-overview/collections-overview.component';
-import CollectionPage from '../collection/collection.component';
-import WithSpinner from '../../components/withSpinner/with-spinner.component';
+// import CollectionsOverview from '../../components/collections-overview/collections-overview.component'; REMOVED BY REFACTORING CONATINER PATTERN
+// import CollectionPage from '../collection/collection.component';
+// import WithSpinner from '../../components/withSpinner/with-spinner.component'; REFACTORED
 
   //PRE- REDUX THUNK CODE
 // import { firestore, convertCollectionsSnapshotToMap } from '../../firebase/firebase.utils'; 
 
-const CollectionsOverviewWithSpinner = WithSpinner(CollectionsOverview);
-const CollectionsPageWithSpinner = WithSpinner(CollectionPage);
+//Container Patter
+import CollectionsOverviewContainer from '../../components/collections-overview/collections-overview.container';
+import CollectionPageContainer from '../../pages/collection/collection.container';
+
+// const CollectionsOverviewWithSpinner = WithSpinner(CollectionsOverview);  REMOVED BY REFACTORING COLLECTIONS OVERVIEW CONTAINER
+// const CollectionsPageWithSpinner = WithSpinner(CollectionPage); REFACTORED
+
 
 class ShopPage extends React.Component {
   
@@ -47,15 +52,28 @@ class ShopPage extends React.Component {
   }
 
   render() {
-    const { match, isCollectionFetching, isCollectionsLoaded } = this.props;
-      //PRE- REDUX THUNK CODE
+    const { match } = this.props;
+    //PRE- REDUX THUNK CODE
     // const { loading } = this.state;
     return (
       <div className='shop-page'>
-        <Route exact path={`${match.path}`} render={(props) => <CollectionsOverviewWithSpinner isLoading={isCollectionFetching} {...props} />} />
+        <Route exact 
+          path={`${match.path}`} 
+          // render={(props) => 
+          //   <CollectionsOverviewWithSpinner 
+          //     isLoading={isCollectionFetching} 
+          //     {...props} 
+          //   />} REMOVED BY REFACTORING WITH CONTAINER PATTER
+          component={CollectionsOverviewContainer}
+        />
         <Route 
           path={`${match.path}/:collectionId`} 
-          render={(props) => <CollectionsPageWithSpinner isLoading={!isCollectionsLoaded} {...props} />}
+          // render={(props) => 
+          //   <CollectionsPageWithSpinner 
+          //     isLoading={!isCollectionsLoaded} 
+          //     {...props} 
+          //   />} REFACTORED
+          component={CollectionPageContainer}
         />
       </div>
     );
@@ -64,10 +82,9 @@ class ShopPage extends React.Component {
 };
 
 //REDUX THUNK CODE
-const mapStateToProps = createStructuredSelector({
-  isCollectionFetching: selectIsCollectionFetching,
-  isCollectionsLoaded: selectIsCollectionsLoaded
-})
+// const mapStateToProps = createStructuredSelector({
+//   isCollectionsLoaded: selectIsCollectionsLoaded
+// }) <<< REMOVED BY REFACTORING
 
 const mapDispatchToProps = dispatch => ({
   //PRE REDUX THUNK CODE
@@ -77,4 +94,4 @@ const mapDispatchToProps = dispatch => ({
   fetchCollectionsStartAsync: () => dispatch(fetchCollectionsStartAsync())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ShopPage);
+export default connect(null, mapDispatchToProps)(ShopPage);
